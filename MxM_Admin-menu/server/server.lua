@@ -77,7 +77,7 @@ AddEventHandler('playerConnecting', function (playerName,setKickReason,deferrals
                                             SaveResourceFile(GetCurrentResourceName(), 'mxmban.json', json.encode(Table, { indent = true }), -1)
                                         end
                                         CancelEvent()
-                                        setKickReason("[MxM_Admin_Menu] | "..MxM_Lang["you_banned_from_this_server"]..BanTable.reason.."\n"..MxM_Lang["banned_by"]..BanTable.bannedbyName.."\n"..MxM_Lang["time_rimanente"]..os.date("%x", BanTable.scadenzaban).." "..os.date("%X", BanTable.scadenzaban))
+                                        setKickReason("[MxM_Admin_Menu] | "..MxM_Lang["you_banned_from_this_server"]..BanTable.reason.."\n"..MxM_Lang["banned_by"]..BanTable.bannedbyName.."\n"..MxM_Lang["time_rimanente"]..os.date("%x", BanTable.scadenzaban).." "..os.date("%X", BanTable.scadenzaban).."\n Ban ID: "..BanTable.banId)
                                         _print(MxM_Lang["player"]..GetPlayerName(_src)..MxM_Lang["connecting_banned_identifier"],"inform")
                                     end
                                 else
@@ -89,7 +89,7 @@ AddEventHandler('playerConnecting', function (playerName,setKickReason,deferrals
                                         SaveResourceFile(GetCurrentResourceName(), 'mxmban.json', json.encode(Table, { indent = true }), -1)
                                     end
                                     CancelEvent()
-                                    setKickReason("[MxM_Admin_Menu] | "..MxM_Lang["you_banned_from_this_server"]..BanTable.reason.."\n"..MxM_Lang["banned_by"]..BanTable.bannedbyName.."\n"..MxM_Lang["time_rimanente"]..os.date("%x", BanTable.scadenzaban).." "..os.date("%X", BanTable.scadenzaban))
+                                    setKickReason("[MxM_Admin_Menu] | "..MxM_Lang["you_banned_from_this_server"]..BanTable.reason.."\n"..MxM_Lang["banned_by"]..BanTable.bannedbyName.."\n"..MxM_Lang["time_rimanente"]..os.date("%x", BanTable.scadenzaban).." "..os.date("%X", BanTable.scadenzaban).."\n Ban ID: "..BanTable.banId)
                                     _print(MxM_Lang["player"]..GetPlayerName(_src)..MxM_Lang["connecting_banned_identifier"],"inform")
                                     Banned = true
                                     break
@@ -103,7 +103,7 @@ AddEventHandler('playerConnecting', function (playerName,setKickReason,deferrals
                                         for g, aa in pairs(Playertokens) do
                                             if aa == TokenBanlist then
                                                 CancelEvent()
-                                                setKickReason("[MxM_Admin_Menu] | "..MxM_Lang["you_banned_from_this_server"].."\n"..MxM_Lang["banned_by"]..BanTable.bannedbyName.."\n"..BanTable.reason..MxM_Lang["perma_ban"])
+                                                setKickReason("[MxM_Admin_Menu] | "..MxM_Lang["you_banned_from_this_server"].."\n"..MxM_Lang["banned_by"]..BanTable.bannedbyName.."\n"..BanTable.reason..MxM_Lang["perma_ban"].."\n Ban ID: "..BanTable.banId)
                                                 _print(MxM_Lang["player"]..GetPlayerName(_src)..MxM_Lang["connecting_banned_tokens"],"inform") 
                                                 Banned = true
                                                 break
@@ -224,7 +224,7 @@ MxM_Pj.LogSistem = function(_src,reason,admin,ban,sban,Other)
             Color = 16711680
             Title = MxM_Lang["title_webhook_banned"] 
             Webhook	= MxM_Pj_Admin_Menu_table.Log.Discord.webhook_ban    
-            Descrizione = "``Player:`` **"..PlayerName.."** \n ``ServerID:`` **".._src.."** \n ``Banned By:`` **"..AdminName.."** \n ``Reason:`` **"..reason.."** \n ``SteamID:`` **"..steam.."** \n ``Discord:`` <@"..discord..">".."  \n ``Rockstar License:`` **"..license.."** \n ``Live Id:`` **"..live.."** \n ``Xbox Id:`` **"..xbl.."** \n ``Ip:`` **"..ip.."**".."\n``Sban:`` **"..os.date("%x", sban).." "..os.date("%X", sban).."**\n\n **"..MxM_Pj_Admin_Menu.ServerName.."**:| **[MxM_Admin_Menu]** | Version: "..MxM_Pj_Admin_Menu.Version
+            Descrizione = "``Player:`` **"..PlayerName.."** \n ``ServerID:`` **".._src.."** \n ``Banned By:`` **"..AdminName.."** \n ``Reason:`` **"..reason.."** \n ``SteamID:`` **"..steam.."** \n ``Discord:`` <@"..discord..">".."  \n ``Rockstar License:`` **"..license.."** \n ``Live Id:`` **"..live.."** \n ``Xbox Id:`` **"..xbl.."** \n ``Ip:`` **"..ip.."**".."\n``Sban:`` **"..os.date("%x", sban).." "..os.date("%X", sban).."\n ``Ban ID:`` "..Other.."**\n\n **"..MxM_Pj_Admin_Menu.ServerName.."**:| **[MxM_Admin_Menu]** | Version: "..MxM_Pj_Admin_Menu.Version
         else
             Color = 1769216
             Title = MxM_Lang["title_webhook_admin"]
@@ -266,7 +266,7 @@ MxM_Pj.Ban = function(src,target,reason,timeban,perma)
         if type(Table) == "table" then
 			local PlayerName = GetPlayerName(target)
             local bannedbyName = GetPlayerName(src)
-            MxM_Pj.LogSistem(target,reason,src,true,timeban,nil) 
+            MxM_Pj.LogSistem(target,reason,src,true,timeban,#Table + 1) 
 			if PlayerName ~= nil then
 				PlayerName = GetPlayerName(target)
 			else
