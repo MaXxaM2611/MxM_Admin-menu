@@ -516,6 +516,9 @@ OpenblipPlayer = function ()
             end
         end
     end)
+    if not mostrablip then 
+        return
+    end
 end
 
 local mostranomi = false
@@ -552,6 +555,9 @@ local mostranomi = false
             end
         end
     end)
+    if not mostranomi then 
+        return
+    end
 end
 
 
