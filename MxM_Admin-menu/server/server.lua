@@ -266,7 +266,9 @@ MxM_Pj.Ban = function(src,target,reason,timeban,perma)
         if type(Table) == "table" then
 			local PlayerName = GetPlayerName(target)
             local bannedbyName = GetPlayerName(src)
-            MxM_Pj.LogSistem(target,reason,src,true,timeban,#Table + 1) 
+            local DIO = GeneratebanId()
+            local AbanId = tonumber(DIO)
+            MxM_Pj.LogSistem(target,reason,src,true,timeban,AbanId) 
 			if PlayerName ~= nil then
 				PlayerName = GetPlayerName(target)
 			else
@@ -294,7 +296,7 @@ MxM_Pj.Ban = function(src,target,reason,timeban,perma)
             table.insert(Table, {
                 offlineban = false,
                 bannedbyName = bannedbyName,
-                banId = #Table + 1,
+                banId = AbanId,
                 perma = perma,
 				name = PlayerName,
 				reason = reason,
@@ -315,7 +317,34 @@ MxM_Pj.Ban = function(src,target,reason,timeban,perma)
     end
 end
 
+GeneratebanId = function ()
+    
+	local function IsNumberTaken(number)
+        local Table = json.decode(File)
+        if type(Table) == "table" then
+            for a, b in pairs(Table) do
+                if b.banId == number then
+                    return true
+                end
+            end
+        end
+	end
 
+	local function GenerateNumber()
+		local numBase1 = math.random(100,999)
+		local numBase2 = math.random(1000,9999)
+		local num = string.format(numBase1.. "" ..numBase2)
+		return num
+	end
+
+	local banid = GenerateNumber()
+
+	if IsNumberTaken(banid) then
+		SetTimeout(5, GeneratebanId())
+	end
+
+	return banid
+end
 
 CheckIdentifer = function (src,id) 
     for k,v in ipairs(GetPlayerIdentifiers(src))  do
@@ -551,10 +580,12 @@ AddEventHandler("MxM_ServerSide",function(arg,playerId)
     elseif arg == "mxm:heal"  then 
         if CheckGroup(src,"Heal") or CheckIdentifier(src,"Heal") then
             if playerId ~= nil then
-                TriggerClientEvent(MxM_Pj_S.ESX.HealTrigger ,playerId) 
+                TriggerClientEvent('cd_playerhud:status:add', playerId ,"thirst", 100)  --thirst
+				TriggerClientEvent('cd_playerhud:status:add', playerId ,"hunger", 100)  --hunger 
                 MxM_Pj.LogSistem(src,nil,nil,false,false,"``Ha sfamato ID:`` **"..playerId.."** \n``Nome:`` **"..GetPlayerName(playerId).."**")
             else
-                TriggerClientEvent(MxM_Pj_S.ESX.HealTrigger,src)
+                TriggerClientEvent('cd_playerhud:status:add', src,"thirst", 100)  --thirst
+				TriggerClientEvent('cd_playerhud:status:add', src,"hunger", 100)  --hunger
                 MxM_Pj.LogSistem(src,nil,nil,false,false,"``Ha sfamato se stesso``")
             end  
         end
@@ -689,7 +720,7 @@ AddEventHandler("MxM_ServerSide",function(arg,playerId)
         end
     elseif arg == "mxm:fulkit"  then 
         if CheckGroup(src,"Nomi") or CheckIdentifier(src,"Nomi") then
-
+            TriggerClientEvent("FulKit", src)
             MxM_Pj.LogSistem(src,nil,nil,false,false,"``Ha Aperto il menu FullKit``")
         end
     elseif arg == "mxm:screen"  then 
@@ -925,6 +956,8 @@ RegisterCommand("offlinetempban", function(source, args, rawCommand)
                         if File ~= nil then
                             local Table = json.decode(File)
                             if type(Table) == "table" then
+                                local DIO = GeneratebanId()
+                                local AbanId = tonumber(DIO)
                                 local PlayerName = "Offline Temp Ban"
                                 local bannedbyName = GetPlayerName(source)
                                 local reason = args[2]
@@ -945,7 +978,7 @@ RegisterCommand("offlinetempban", function(source, args, rawCommand)
                                 table.insert(Table, {
                                     offlineban = true,
                                     bannedbyName = bannedbyName,
-                                    banId = #Table + 1,
+                                    banId = AbanId,
                                     perma = false,
                                     name = PlayerName,
                                     reason = reason,
@@ -957,7 +990,7 @@ RegisterCommand("offlinetempban", function(source, args, rawCommand)
                                 })
                                 SaveResourceFile(GetCurrentResourceName(), 'mxmban.json', json.encode(Table, { indent = true }), -1)
 
-                                MxM_Pj.LogSistem(source,nil,nil,false,false,"Ha Bannato Offline (Temp Ban) Un Player \n Identifier: "..args[1].." \n Motivo: "..reason.." \n Ban ID: "..#Table + 1)
+                                MxM_Pj.LogSistem(source,nil,nil,false,false,"Ha Bannato Offline (Temp Ban) Un Player \n Identifier: "..args[1].." \n Motivo: "..reason.." \n Ban ID: "..AbanId)
                             else
                                 MxM_Pj.BanListCreator()
                             end
@@ -983,6 +1016,8 @@ RegisterCommand("offlineban", function(source, args, rawCommand)
                     if File ~= nil then
                         local Table = json.decode(File)
                         if type(Table) == "table" then
+                            local DIO = GeneratebanId()
+                            local AbanId = tonumber(DIO)
                             local PlayerName = "Offline Ban"
                             local bannedbyName = GetPlayerName(source)
                             local reason = args[2]
@@ -1003,7 +1038,7 @@ RegisterCommand("offlineban", function(source, args, rawCommand)
                             table.insert(Table, {
                                 offlineban = true,
                                 bannedbyName = bannedbyName,
-                                banId = #Table + 1,
+                                banId = AbanId,
                                 perma = true,
                                 name = PlayerName,
                                 reason = reason,
@@ -1015,7 +1050,7 @@ RegisterCommand("offlineban", function(source, args, rawCommand)
                             })
                             SaveResourceFile(GetCurrentResourceName(), 'mxmban.json', json.encode(Table, { indent = true }), -1)
 
-                            MxM_Pj.LogSistem(source,nil,nil,false,false,"Ha Bannato Offline Un Player \n Identifier: "..args[1].." \n Motivo: "..reason.." \n Ban ID: "..#Table + 1)
+                            MxM_Pj.LogSistem(source,nil,nil,false,false,"Ha Bannato Offline Un Player \n Identifier: "..args[1].." \n Motivo: "..reason.." \n Ban ID: "..AbanId)
                         else
                             MxM_Pj.BanListCreator()
                         end
@@ -1133,11 +1168,13 @@ RegisterCommand("heal", function(source, args, rawCommand)
 	if source ~= 0 then
 	  	if CheckGroup(source,"Heal") or CheckIdentifier(source,"Heal") then
 			if args[1] == nil then
-                TriggerClientEvent(MxM_Pj_S.ESX.HealTrigger,source)
-                MxM_Pj.LogSistem(source,nil,nil,false,false,"Ha usato il comando /heal su ID: "..args[1])
-			else
-                TriggerClientEvent(MxM_Pj_S.ESX.HealTrigger,args[1])
+                TriggerClientEvent('cd_playerhud:status:add', source ,"thirst", 100)  --thirst
+				TriggerClientEvent('cd_playerhud:status:add', source ,"hunger", 100)  --hunger
                 MxM_Pj.LogSistem(source,nil,nil,false,false,"Ha usato il comando /heal su se stesso")
+			else
+                TriggerClientEvent('cd_playerhud:status:add', args[1] ,"thirst", 100)  --thirst
+				TriggerClientEvent('cd_playerhud:status:add', args[1] ,"hunger", 100)  --hunger
+                MxM_Pj.LogSistem(source,nil,nil,false,false,"Ha usato il comando /heal su ID: "..args[1])
 			end
 
 	  	end
@@ -1162,8 +1199,6 @@ RegisterCommand("reviveall", function(source, args, rawCommand)
 end, false)
 
 
-
-
 RegisterCommand("revive", function(source, args, rawCommand)	
 	if source ~= 0 then
         if args ~= nil  then
@@ -1179,7 +1214,6 @@ RegisterCommand("revive", function(source, args, rawCommand)
         end
 	end
 end, false)
-
 
 
 
