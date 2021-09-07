@@ -490,7 +490,7 @@ OpenblipPlayer = function ()
     end
     Citizen.CreateThread(function()
         local blips = {}
-        while true do
+        while mostrablip do
             Citizen.Wait(1)
             for _, ServerPlayer in ipairs(GetActivePlayers()) do
                 local player = tonumber(ServerPlayer)
@@ -515,6 +515,7 @@ OpenblipPlayer = function ()
                 end
             end
         end
+        return
     end)
     if not mostrablip then 
         return
@@ -532,7 +533,7 @@ local mostranomi = false
         print("Nomi sui player Disabilitati")
     end
     Citizen.CreateThread(function()
-        while true do
+        while mostranomi do
             Citizen.Wait(1)
             for _, ServerPlayer in ipairs(GetActivePlayers()) do
                 local player = tonumber(ServerPlayer)
@@ -554,6 +555,7 @@ local mostranomi = false
                 end
             end
         end
+        return
     end)
     if not mostranomi then 
         return
