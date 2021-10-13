@@ -16,7 +16,7 @@
 <h1 class="code-line" data-line-start=3 data-line-end=4><a id="Dependencies_3"></a>Dependencies</h1>
 <ul>
    <li class="has-line-data" data-line-start="4" data-line-end="5">mysql-async</li>
-   <li class="has-line-data" data-line-start="5" data-line-end="7">es_extended (Tested on v1 Final)</li>
+   <li class="has-line-data" data-line-start="5" data-line-end="7">es_extended (Tested on v1 Final) or legacy</li>
 </ul>
 <h1 class="code-line" data-line-start=7 data-line-end=8><a id="Noteworthy_Features_7"></a>Noteworthy Features</h1>
 <h2 class="code-line" data-line-start=8 data-line-end=9><a id="Ban_sistem"></a>Ban Sistem</h2>
