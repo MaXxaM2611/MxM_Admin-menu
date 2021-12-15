@@ -12,6 +12,8 @@ MxM_Pj_Admin_Menu = {
 
     PrintConnecting         = false,
 
+    WebhookConnecting       = false,
+
     Version                 = 3.0,
 
     ServerName              = "|Server name|",
@@ -58,6 +60,7 @@ MxM_Lang = {
     ["title_webhook_image"] = " Log Screen Admin Menu",
     ["title_webhook_banned"] = " Banned",
     ["title_webhook_admin"] = " Warning",
+    ["title_webhook_connect"] = " Connection",
     -----Client
     ["spectate_freecam"] = "Spectate",  -- Credits By Loweri#9667
     ["tp_to_player"] = "Teletrasportati dal player",

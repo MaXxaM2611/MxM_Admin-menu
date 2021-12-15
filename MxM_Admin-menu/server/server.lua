@@ -44,6 +44,44 @@ AddEventHandler('playerConnecting', function (playerName,setKickReason,deferrals
 	if MxM_Pj_Admin_Menu.PrintConnecting then
 		_print(MxM_Lang["player"]..GetPlayerName(_src)..MxM_Lang["connecting"],"success")  
 	end
+    if MxM_Pj_Admin_Menu.WebhookConnecting then
+        local license,identifier,liveid,xblid,discord,ip = "N/A","N/A","N/A","N/A","N/A","N/A"
+        for k,v in ipairs(GetPlayerIdentifiers(_src))do
+            if string.sub(v, 1, string.len("license:")) == "license:" then
+                license = v
+            elseif string.sub(v, 1, string.len("steam:")) == "steam:" then
+                identifier = v
+            elseif string.sub(v, 1, string.len("live:")) == "live:" then
+                liveid = v
+            elseif string.sub(v, 1, string.len("xbl:")) == "xbl:" then
+                xblid  = v
+            elseif string.sub(v, 1, string.len("discord:")) == "discord:" then
+                discord = v
+            elseif string.sub(v, 1, string.len("ip:")) == "ip:" then
+                ip = v
+            end
+        end
+        local embed = {
+	    	{
+                author = {
+                    name = "| [MxM_Admin_Menu] | Version: " .. MxM_Pj_Admin_Menu.Version,
+                    url = "https://www.fenixhub.dev/",
+                    icon_url = "https://cdn.discordapp.com/attachments/636955559626670080/795310131704627231/logo-fen.png"
+                },
+	    		color = 696969,
+	    		title = MxM_Lang["title_webhook_connect"],
+	    		description = "**Nome :** ".. playerName .. "\n**Steam Hex :** ".. identifier .. "\n**Licenza :** " .. license .. "\n**Discord :**" .. '<@' .. string.sub(discord, 9) .. '>' .. "\n**IP :** ||".. string.sub(ip, 3) .. '||\n\n **'..MxM_Pj_Admin_Menu.ServerName.."**:| **[MxM_Admin_Menu]** | Version: "..MxM_Pj_Admin_Menu.Version,
+	    		footer = {
+                    text = "[MxM_Admin_Menu]  By MaXxaM#0511 - " .. os.date("%x %X %p"),
+                    icon_url = 'https://cdn.discordapp.com/attachments/636955559626670080/795310131704627231/logo-fen.png'
+                }
+	    	}
+	    }
+
+	PerformHttpRequest(MxM_Pj_Admin_Menu_table.Log.Discord.webhook_connecting, function(err, text, headers)
+		end, 'POST', json.encode({embeds = embed}), { ['Content-Type'] = 'application/json' }
+	)
+    end
 	if File ~= nil then
 		local Table = json.decode(File)
 		if type(Table) == "table" then

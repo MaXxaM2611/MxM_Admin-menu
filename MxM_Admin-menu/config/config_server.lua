@@ -16,9 +16,10 @@ MxM_Pj_Admin_Menu_table = {
     Log = {
         Discord = {
             enable = true,
-            webhook_image   = "Your Webhook",
-            webhook_ban     = "Your Webhook",
-            webhook_admin   = "Your Webhook",
+            webhook_image       = "Your Webhook",
+            webhook_ban         = "Your Webhook",
+            webhook_admin       = "Your Webhook",
+            webhook_connecting  = "Your Webhook",
         },
     },
 
